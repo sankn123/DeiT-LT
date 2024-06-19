@@ -1,10 +1,12 @@
 import os
+import sys
+sys.path.append("/home/guest1/Vim/vim")
+import models_mamba
 import argparse
 import datetime
 import numpy as np
 import time
 import torch
-import sys
 
 import torch.backends.cudnn as cudnn
 import json
@@ -14,7 +16,7 @@ import wandb
 
 
 
-import sys
+
 from arguments import *
 from timm.data import Mixup
 from timm.loss import SoftTargetCrossEntropy
@@ -30,7 +32,7 @@ from samplers import RASampler
 from timm.models import create_model
 
 
-import deit_models
+# import deit_models
 import teacher_models
 import utils
 from utils import *
@@ -186,14 +188,42 @@ def main(args):
     print("[INFORMATION] THe model being used is ", args.model)
 
     print("[INFORMATION] Model loaded from custom file")
-    model = deit_models.__dict__[args.model](
-        pretrained=False,
-        num_classes=args.nb_classes,
-        drop_rate=args.drop,
-        drop_path_rate=args.drop_path,
-        mask_attn=args.mask_attn,
-        early_stopping=args.early_stopping,
-    )
+    
+    if 'vim' in args.model:
+        
+        if args.model == "vim_tiny_distilled":
+            model = create_model(
+            'vim_tiny_patch16_224_bimambav2_final_pool_mean_abs_pos_embed_with_midclstok_div2',
+            pretrained=False,
+            num_classes=args.nb_classes,
+            drop_rate=args.drop,
+            drop_path_rate=args.drop_path,
+            drop_block_rate=None,
+            img_size=args.input_size
+        )
+        
+        if args.model == "vim_small_distilled":
+            model = create_model(
+            'vim_small_patch16_224_bimambav2_final_pool_mean_abs_pos_embed_with_midclstok_div2',
+            pretrained=False,
+            num_classes=args.nb_classes,
+            drop_rate=args.drop,
+            drop_path_rate=args.drop_path,
+            drop_block_rate=None,
+            img_size=args.input_size
+        )
+            
+        
+    else:
+        
+        model = deit_models.__dict__[args.model](
+            pretrained=False,
+            num_classes=args.nb_classes,
+            drop_rate=args.drop,
+            drop_path_rate=args.drop_path,
+            mask_attn=args.mask_attn,
+            early_stopping=args.early_stopping,
+        )
     model.to(device)
     print("Model", model)
 

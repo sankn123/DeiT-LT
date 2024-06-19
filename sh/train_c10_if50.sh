@@ -1,9 +1,9 @@
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=1 --use_env --master_port=47773 main.py \
-    --model deit_base_distilled_patch16_224 \
+    --model vim_tiny_distilled \
     --batch-size 128 \
     --epochs 1200 \
     --gpu 0 \
-    --teacher-path "Enter teacher path" \
+    --teacher-path "/home/guest1/DeiT-LT/paco_sam_ckpt_cf10_if50.pth" \
     --distillation-type hard \
     --data-path cifar10 \
     --data-set CIFAR10LT \
