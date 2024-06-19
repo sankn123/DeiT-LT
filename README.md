@@ -38,6 +38,8 @@ git clone https://github.com/val-iisc/DeiT-LT.git
 ```
 conda env create -f environment.yml
 conda activate deitlt
+# Ignore the pytorch version installed, upgrade to a newer version (for mamba)
+conda install pytorch==2.2.1 torchvision==0.17.1 torchaudio==2.2.1 pytorch-cuda=11.8 -c pytorch -c nvidia
 ```
 
 4. Download the teacher models as given in Results table.
